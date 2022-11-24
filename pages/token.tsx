@@ -40,11 +40,23 @@ const Token: NextPage = () => {
 
   return (
     <>
-      <Nav></Nav>
       <NoSSRWrapper>
-        <Flex flexDirection="column" justifyContent="flex-start">
-          <Box p="10px" border="1px solid gray">
-            <Text fontSize="2xl" style={{ fontWeight: "bold" }}>
+        <Flex
+          flexDirection="column"
+          justifyContent="flex-start"
+          alignItems="center"
+        >
+          <Box
+            p="10px"
+            my="10px"
+            borderBottom="1px solid #cdcdcd"
+            width="80%"
+            textAlign="center"
+          >
+            <Text
+              fontSize="3xl"
+              style={{ fontWeight: "bold", textDecoration: "underline" }}
+            >
               Account Infomation{" "}
             </Text>
             <Text fontSize="xl" style={{ fontWeight: "bold" }}>
@@ -58,20 +70,31 @@ const Token: NextPage = () => {
               {userInfo.balance} {userInfo.symbol}
             </Text>
           </Box>
-          <Box p="10px" border="1px solid gray">
+          <Box
+            p="10px"
+            mb="10px"
+            borderBottom="1px solid #cdcdcd"
+            width="80%"
+            textAlign="center"
+          >
             <Flex
               flexDirection="column"
-              alignItems="flex-start"
+              alignItems="center"
               justifyContent="flex-start"
             >
-              <Text fontSize="2xl" style={{ fontWeight: "bold" }}>
+              <Text
+                fontSize="2xl"
+                style={{ fontWeight: "bold", textDecoration: "underline" }}
+              >
                 {symbol} Token Infomation
               </Text>
               <Text fontSize="xl">
-                Total supply: {totalSupply} {symbol}
+                {symbol} token total supply: {totalSupply} {symbol}
               </Text>
               <Text fontSize="xl">Your wallet balance of : {balance} YTC</Text>
-              <Text fontSize="xl">Your allowance : {allowance} YTC</Text>
+              <Text fontSize="xl">
+                Your {symbol} allowance : {allowance} YTC
+              </Text>
               <NumberInput
                 mt={5}
                 onChange={(v: number) => setAmount(v)}

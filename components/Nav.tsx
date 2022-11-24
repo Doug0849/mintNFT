@@ -16,13 +16,12 @@ import {
   useColorModeValue,
   Stack,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-
-const Links: Array<String> = ["Z institute 5th Homework", "Token", "Board"];
-
+const Links: Array<String> = ["Token", "Board", "NFTs"];
 
 const NavLink = ({ children }: { children: ReactNode }) => (
   <Link
@@ -45,7 +44,7 @@ export default function withAction() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4} boxShadow='lg'>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -60,6 +59,9 @@ export default function withAction() {
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
+              <Link href="/">
+              <Image src="https://warehouse.kaik.network/school/favicon/d9887f6b-03a2-4543-83cf-4c38d5be61e4/8663666c-3162-437a-a749-4e2a9e6824e1.png" />
+              </Link>
               {Links.map((link, i) => (
                 <NavLink key={i}>{link}</NavLink>
               ))}

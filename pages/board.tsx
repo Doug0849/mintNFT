@@ -1,4 +1,4 @@
-import { Container, Heading, Button, Text, Input } from "@chakra-ui/react";
+import { Container, Heading, Button, Text, Input, NumberInput, NumberInputField, NumberInputStepper, NumberDecrementStepper, NumberIncrementStepper } from "@chakra-ui/react";
 import { useToast, Box } from "@chakra-ui/react";
 import useBalanceOf from "../hooks/myToken/useBalanceOf";
 import type { NextPage } from "next";
@@ -18,18 +18,16 @@ const Board: NextPage = () => {
   const toast = useToast();
 
   const { address }: any = useAccount();
-
   const lastPaidVal = useAnnouncementLastPaid();
-
-  let [message, setMessage] = useState<string>("");
-  let [value, setValue] = useState<number>(0);
-  let [approveAllowance, setApproveAllowance] = useState<number>(1);
   let balance = useBalanceOf();
   let allowance = useAllowance(address, chatroomAddress);
   const symbol = useSymbol();
-
-  const { approve, statusApprove } = useApprove(approveAllowance);
   const announcement = useAnnouncement();
+
+  let [message, setMessage] = useState<string>("");
+  let [value, setValue] = useState<number>(0);
+  let [approveAllowance, setApproveAllowance] = useState<number>(0);
+  const { approve, statusApprove } = useApprove(approveAllowance);
 
   //   let newAnnouncementMyToken = () => {};
   const { newAnnouncementMyToken, statusNewAnnouncement, data } =
@@ -37,9 +35,8 @@ const Board: NextPage = () => {
 
   return (
     <>
-      <Nav></Nav>
       <NoSSRWrapper>
-        <Container pt={5}>
+        <Container pt={5} mb="70px">
           <Heading>Board</Heading>
           <Text>
             Current Balance: {balance} {symbol}
@@ -64,20 +61,26 @@ const Board: NextPage = () => {
               borderColor="gray.500"
               mt={3}
             />
-            <Input
-              type="number"
+
+            <NumberInput
               onChange={(e) => {
                 if (value < 0) {
                   setValue(0);
                 }
-                setValue(Number(e.target.value));
+                setValue(e);
               }}
               value={value}
               placeholder="Value"
               borderColor="gray.500"
               mt={3}
               min={0}
-            />
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
             {statusNewAnnouncement && (
               <Text>Status: {statusNewAnnouncement}</Text>
             )}
@@ -101,20 +104,26 @@ const Board: NextPage = () => {
           </Box>
           <Box mt={3} p={3} backgroundColor="gray.200" borderRadius={"lg"}>
             <Text> Current Allowance: {allowance}</Text>
-            <Input
-              type="number"
-              onChange={(e) => {
+            <NumberInput
+              onChange={(e: number) => {
                 if (value < 0) {
                   setApproveAllowance(0);
                 }
-                setApproveAllowance(Number(e.target.value));
+                setApproveAllowance(e);
               }}
               value={approveAllowance}
               placeholder="Value"
               borderColor="gray.500"
               mt={3}
               min={1}
-            />
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+
             {statusApprove && <Text>Status: {statusApprove}</Text>}
 
             <Button

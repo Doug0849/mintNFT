@@ -6,6 +6,7 @@ const useGetWalletBalance = () => {
   const { address } = useAccount();
   const { data, isError, isLoading } = useBalance({
     address: address,
+    watch: true,
   });
   const [symbol, setSymbol] = useState("");
   const [addr, setAddr] = useState("");
@@ -15,7 +16,7 @@ const useGetWalletBalance = () => {
     setSymbol(data?.symbol || "");
     setAddr(address || "");
     setBalance(data?.formatted || "");
-  },[]);
+  }, [address, data]);
 
   return {
     addr,

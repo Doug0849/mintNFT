@@ -12,7 +12,6 @@ const useAnnouncementLastPaid = () => {
     chainId: 5,
     watch: true,
   });
-  console.log(data)
 
   let useAnnouncementLastPaid = parseInt(data, 10);
   useAnnouncementLastPaid = useAnnouncementLastPaid / 1000000000000000000
