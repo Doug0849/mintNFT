@@ -22,40 +22,27 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
-import Nav from "../components/Nav";
-import useTotalSupply from "../hooks/myToken/useTotalSupply";
-import useGetUserInfo from "../hooks/useGetWalletBalance";
-import useSymbol from "../hooks/myToken/useSymbol";
 import NoSSRWrapper from "../components/NoSSRWrapper";
 import { useEffect, useState } from "react";
-import useFreeMint from "../hooks/myToken/useFreeMint";
-import useIncreaseAllowance from "../hooks/myToken/useIncreaseAllowance";
-import useBalanceOf from "../hooks/myToken/useBalanceOf";
-import { useAccount } from "wagmi";
-import useAllowance from "../hooks/myToken/useAllowance";
 import useNFTMint from "../hooks/NFT/useNFTMint";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useDisclosure } from "@chakra-ui/react";
-import useListenTransfer from "../hooks/NFT/useListenTransfer"
+import useNFTWhiteListMint from "../hooks/NFT/useNFTWhiteListMint";
+import { NFTAddress } from "../constants";
 
 const NFT: NextPage = () => {
-  // const userInfo = useGetUserInfo();
-  // const totalSupply = useTotalSupply();
-  // const balance = useBalanceOf();
-  // const symbol = useSymbol();
   const [mintCount, setMintCount] = useState<number>(1);
-  const { mint, status, hash, tokenID }: any = useNFTMint(mintCount);
-  // const { increaseAllowance, increaseStatus } = useIncreaseAllowance(amount);
-  // const allowance: number = useAllowance(address, address);
+  const { mint, hash, status, tokenID }: any = useNFTMint(mintCount);
+  const { whiteListMint, whash, wstatus, WtokenID }: any =
+    useNFTWhiteListMint(mintCount);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-
   useEffect(() => {
-    if (status === "completed") {
+    if (status === "completed" || wstatus === "completed") {
       onOpen();
     }
-  }, [status]);
+  }, [status, wstatus]);
 
   return (
     <>
@@ -84,6 +71,7 @@ const NFT: NextPage = () => {
                 value={mintCount}
                 min={1}
                 max={10}
+                width="300px"
               >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -92,7 +80,6 @@ const NFT: NextPage = () => {
                 </NumberInputStepper>
               </NumberInput>
 
-              <Text>Status: {status}</Text>
               {hash && (
                 <Link
                   href={`https://goerli.etherscan.io/tx/${hash}`}
@@ -102,26 +89,53 @@ const NFT: NextPage = () => {
                 </Link>
               )}
               {/* <pre>Status: {statusMintNFT}</pre> */}
+              <Flex justifyContent="center" gap="6">
+                <Flex direction="column">
+                  <Button
+                    colorScheme="blue"
+                    mt={5}
+                    onClick={async () => {
+                      let tx = await mint();
 
-              <Button
-                colorScheme="blue"
-                mt={5}
-                onClick={async () => {
-                  let tx = await mint();
+                      // let freeMintTx = await freeMint?.();
+                      // await freeMintTx?.wait();
+                      // toast({
+                      //   title: "Transaction Success!",
+                      //   description: "Function: Mint",
+                      //   status: "success",
+                      //   duration: 5000,
+                      //   isClosable: true,
+                      // });
+                    }}
+                  >
+                    Mint NFT
+                  </Button>
+                  <Text>Mint Status: {status}</Text>
+                </Flex>
 
-                  // let freeMintTx = await freeMint?.();
-                  // await freeMintTx?.wait();
-                  // toast({
-                  //   title: "Transaction Success!",
-                  //   description: "Function: Mint",
-                  //   status: "success",
-                  //   duration: 5000,
-                  //   isClosable: true,
-                  // });
-                }}
-              >
-                Mint NFT
-              </Button>
+                <Flex direction="column">
+                  <Button
+                    colorScheme="orange"
+                    mt={5}
+                    onClick={async () => {
+                      let tx = await whiteListMint();
+
+                      // let freeMintTx = await freeMint?.();
+                      // await freeMintTx?.wait();
+                      // toast({
+                      //   title: "Transaction Success!",
+                      //   description: "Function: Mint",
+                      //   status: "success",
+                      //   duration: 5000,
+                      //   isClosable: true,
+                      // });
+                    }}
+                  >
+                    Whitelist Mint NFT
+                  </Button>
+                  <Text>Whitelist Mint Status: {wstatus}</Text>
+                </Flex>
+              </Flex>
 
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -130,20 +144,35 @@ const NFT: NextPage = () => {
                   <ModalCloseButton />
                   <ModalBody>
                     Your NFT has been minted!
+                    <br />
+                    <br />
+                    <Text>
+                      You can check on Goerli Testnet
+                    </Text>
                     <Link
-                      href={`https://goerli.etherscan.io/tx/${hash}`}
+                      href={`https://goerli.etherscan.io/tx/${hash || whash}`}
                       isExternal
                     >
-                      Transactions Hash: {hash} <ExternalLinkIcon mx="2px" />
+                      Your Transfer Hash : {hash || whash}
+                      <ExternalLinkIcon mx="2px" />
                     </Link>
-                    Your NFT tokenId : {tokenID}
+                    <br />
+                    <br />
+                    <Text>Your NFT TokenID : {tokenID || WtokenID}</Text>
                   </ModalBody>
 
                   <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                       Close
                     </Button>
-                    <Button variant="ghost">Secondary Action</Button>
+                    <Link
+                      href={`https://testnets.opensea.io/assets/goerli/${NFTAddress}/${
+                        tokenID || WtokenID
+                      }`}
+                      isExternal
+                    >
+                      <Button variant="ghost">Check NFT On OpenSea</Button>
+                    </Link>
                   </ModalFooter>
                 </ModalContent>
               </Modal>
