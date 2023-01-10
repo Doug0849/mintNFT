@@ -9,6 +9,15 @@ import { extendTheme } from "@chakra-ui/react";
 import Nav from "../components/Nav";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import {
+  injectedWallet,
+  rainbowWallet,
+  metaMaskWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  trustWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -29,16 +38,24 @@ const { chains, provider, webSocketProvider } = configureChains(
   ]
 );
 
-const { connectors } = getDefaultWallets({
-  appName: "RainbowKit App",
-  chains,
-});
+const connectors = connectorsForWallets([
+  {
+    groupName: "Recommended",
+    wallets: [
+      trustWallet({ chains }),
+      rainbowWallet({ chains }),
+      metaMaskWallet({ chains }),
+      injectedWallet({ chains }),
+      walletConnectWallet({ chains }),  
+    ],
+  },
+]);
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
-  webSocketProvider,
+  webSocketProvider,              
 });
 
 const theme = extendTheme({

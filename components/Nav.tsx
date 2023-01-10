@@ -21,6 +21,7 @@ import {
 import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
+
 const Links: Array<String> = ["Token", "Board", "NFTs"];
 
 const NavLink = ({ children }: { children: ReactNode }) => (

@@ -46,7 +46,6 @@ const NFT: NextPage = () => {
 
   return (
     <>
-      <NoSSRWrapper>
         <Flex
           flexDirection="column"
           justifyContent="flex-start"
@@ -179,7 +178,6 @@ const NFT: NextPage = () => {
             </Flex>
           </Box>
         </Flex>
-      </NoSSRWrapper>
     </>
   );
 };
